@@ -1,26 +1,6 @@
 import { useState } from "react";
 import styles from "./App.module.css";
-
-const getDateFormat = (date, separator = ".") => {
-  const newDate = new Date(date);
-  let newFormatDate = newDate.getDate();
-  let newFormatMonth = newDate.getMonth() + 1;
-  let newFormatYear = newDate.getFullYear();
-  if (newFormatDate < 10) newFormatDate = "0" + newFormatDate;
-  if (newFormatMonth < 10) newFormatMonth = "0" + newFormatMonth;
-  return `${newFormatDate}${separator}${newFormatMonth}${separator}${newFormatYear}`;
-};
-
-const getTimeFormat = (date, separator = ":") => {
-  const newDate = new Date(date);
-  let newFormatHours = newDate.getHours();
-  let newFormatMinutes = newDate.getMinutes();
-  let newFormatSeconds = newDate.getSeconds();
-  if (newFormatHours < 10) newFormatHours = "0" + newFormatHours;
-  if (newFormatMinutes < 10) newFormatMinutes = "0" + newFormatMinutes;
-  if (newFormatSeconds < 10) newFormatSeconds = "0" + newFormatSeconds;
-  return `${newFormatHours}${separator}${newFormatMinutes}${separator}${newFormatSeconds}`;
-};
+import { getDateFormat, getTimeFormat } from "./utils/dateTimeFormat";
 
 export const App = () => {
   const [value, setValue] = useState("");
@@ -58,28 +38,12 @@ export const App = () => {
     }
   };
 
-  const noListItems = (
-    <p className={styles.noMarginText}>Нет добавленных элементов</p>
-  );
-
-  const thereIsListItems = (
-    <ul className={styles.list}>
-      {list.map(({ id, value, date, time }) => {
-        return (
-          <li className={styles.listItem} key={id}>
-            {value} ({date} / {time})
-          </li>
-        );
-      })}
-    </ul>
-  );
-
   return (
     <div className={styles.app}>
       <h1 className={styles.pageHeading}>Ввод значения</h1>
       <p className={styles.noMarginText}>
-        Текущее значение <code>value</code>: "
-        <output className={styles.currentValue}>{value}</output>"
+        Текущее значение <code>value</code>: &quot;
+        <output className={styles.currentValue}>{value}</output>&quot;
       </p>
       {!error ? null : (
         <div className={styles.error}>
@@ -100,7 +64,19 @@ export const App = () => {
       </div>
       <div className={styles.listContainer}>
         <h2 className={styles.listHeading}>Список:</h2>
-        {list.length === 0 ? noListItems : thereIsListItems}
+        {list.length === 0 ? (
+          <p className={styles.noMarginText}>Нет добавленных элементов</p>
+        ) : (
+          <ul className={styles.list}>
+            {list.map(({ id, value, date, time }) => {
+              return (
+                <li className={styles.listItem} key={id}>
+                  {value} ({date} / {time})
+                </li>
+              );
+            })}
+          </ul>
+        )}
       </div>
     </div>
   );
